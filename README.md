@@ -6,7 +6,41 @@ If you wish to use this library in a projects of yours, you can simply clone
 the repo and copy the contents of the `components/` directory into the
 components directory of your ESP IDF project, and modify the `CMakeLists.txt`
 of your `main` directory of your project to include the contents found in
-`main/CMakeLists.txt` of this repo. That's it!
+`main/CMakeLists.txt` of this repo. That's it! To make it easier, below
+are some example commands you might run to achieve this:
+
+### Example Library Installation
+
+```bash
+git clone git@github.com:JSpeedie/ESP32-SPI-SSD1327-Library.git ESP32-SPI-SSD1327-LibraryGit
+mkdir -p ~/esp/esp-idf/[your project name/path here]/components
+cp -r ESP32-SPI-SSD1327-LibraryGit/components/esp32-spi-ssd1327/ ~/esp/esp-idf/[your project name/path here]/components/esp32-spi-ssd1327/
+cd ~/esp/esp-idf/[your project name/path here]
+```
+
+Then you need to edit the `main/CMakeLists.txt` file within your project such
+that the `idf_component_register` call "priv requires" the components. For
+example your `main/CMakeLists.txt` could look like:
+
+```
+set(srcs "oled-test.c")
+
+idf_component_register(SRCS "${srcs}"
+                    REQUIRES driver
+                    PRIV_REQUIRES esp32-spi-ssd1327
+                    INCLUDE_DIRS ".")
+```
+
+Finally, to make use of the library, you just need to include the correct header
+file from the library in the source file where you want to make use of the library.
+Continuing our example, in `main/oled-test.c`, we may add the following lines:
+
+```
+/* Component includes */
+#include "esp32-spi-ssd1327.h"
+```
+
+And you're done!
 
 
 ## Example Program Setup
